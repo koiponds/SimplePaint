@@ -237,6 +237,8 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         // Remember, NO DRAWING here!
 
         lines.add(new Line(prevX, prevY, x, y, currentColor));
+        prevX = x;
+        prevY = y;
         repaint();
         
 
