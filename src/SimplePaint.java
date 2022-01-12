@@ -43,7 +43,21 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
 
     // *** Let's make a nested class to define a new data type that will be stored in a data structure
     // e.g. (not a Rectangle[] rectangles)
-    
+    private class Line {
+        private int x1, x2, y1, y2;
+        private int colorCode;
+
+        public Line(int x1, int x2, int y1, int y2, int colorCode) {
+            this.x1 = x1;
+            this.x2 = x2;
+            this.y1 = y1;
+            this.y2 = y2;
+            this.colorCode = colorCode;
+        }
+
+    }
+
+    private ArrayList<Line> lines = new ArrayList<Line>();
 
     /**
      * Constructor for SimplePaintPanel class sets the background color to be
@@ -53,7 +67,9 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         this.setBackground(Color.WHITE);
         //*** Since the SimplePaint JPanel is also a Listener, register appropriately
 
-        
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+
     }
 
     public void paintComponent(Graphics g) {
@@ -110,7 +126,20 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
  
         
         // *** Re-draw all of the information, based on the state of our data structure
+        for (Line line : lines) {
+            switch (line.colorCode) {
+                case BLACK -> g.setColor(Color.BLACK);
+                case RED -> g.setColor(Color.RED);
+                case GREEN -> g.setColor(Color.GREEN);
+                case BLUE -> g.setColor(Color.BLUE);
+                case CYAN -> g.setColor(Color.CYAN);
+                case MAGENTA -> g.setColor(Color.MAGENTA);
+                case YELLOW -> g.setColor(Color.YELLOW);
+            }
+            g.drawLine(line.x1, line.y1,
+                    line.x2, line.y2);
 
+        }
         
     } // end paintComponent()
 
@@ -150,7 +179,7 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         if (x > width - 53) {
             if (y > height - 53) {
             			//  ***Clicked on "CLEAR button".
-                      
+                lines.clear();
             }
             else {
                 changeColor(y);  // Clicked on the color palette.
@@ -160,10 +189,11 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         else if (x > 3 && x < width - 56 && y > 3 && y < height - 3) {
                 // The user has clicked on the white drawing area.
                 // Start drawing a curve from the point (x,y).
-            
-        	
+        	prevX = x;
+            prevY = y;
+            dragging = true;
         }
-
+        repaint();
     } // end mousePressed()
 
 
@@ -206,7 +236,8 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         // *** update our data structure to reflect the new state as the user is dragging
         // Remember, NO DRAWING here!
 
-        
+        lines.add(new Line(prevX, x, prevY, y, currentColor));
+        repaint();
         
 
     } // end mouseDragged()
