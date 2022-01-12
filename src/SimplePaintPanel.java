@@ -5,25 +5,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 
-public class SimplePaint extends JPanel implements MouseListener, MouseMotionListener {
+public class SimplePaintPanel extends JPanel implements MouseListener, MouseMotionListener {
 
-    /**
-     * This main routine allows this class to be run as a program.
-     */
-    public static void main(String[] args) {
-        JFrame window = new JFrame("Simple Paint");
-        SimplePaint content = new SimplePaint();
-        window.setContentPane(content);
-        window.setSize(700,380);
-        window.setLocation(100,100);
-        window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        window.setVisible(true);
-
-    }
-
-    /**
-     * Some constants to represent the color selected by the user.
-     */
     private final static int BLACK = 0,
             RED = 1,     
             GREEN = 2,   
@@ -41,30 +24,14 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
     private int prevX, prevY;     // The previous location of the mouse.
     private boolean dragging;      // This is set to true while the user is drawing.
 
-    // *** Let's make a nested class to define a new data type that will be stored in a data structure
-    // e.g. (not a Rectangle[] rectangles)
-    private class Line {
-        private int x1, y1, x2, y2;
-        private int colorCode;
-
-        public Line(int x1, int y1, int x2, int y2, int colorCode) {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.colorCode = colorCode;
-        }
-
-    }
-
     private ArrayList<Line> lines = new ArrayList<Line>();
 
     /**
      * Constructor for SimplePaintPanel class sets the background color to be
      * white and sets it to listen for mouse events on itself.
      */
-    SimplePaint() {
-        this.setBackground(Color.WHITE);
+    SimplePaintPanel() {
+        this.setBackground(Color.BLACK);
         //*** Since the SimplePaint JPanel is also a Listener, register appropriately
 
         this.addMouseListener(this);
@@ -80,14 +47,8 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
 
         int colorSpacing = (height - 56) / 7;
 
-        g.setColor(Color.GRAY);
-        g.drawRect(0, 0, width-1, height-1);  // one rectangle for each pixel 
-        g.drawRect(1, 1, width-3, height-3);
-        g.drawRect(2, 2, width-5, height-5);
-
-        /* Draw a 56-pixel wide gray rectangle along the right edge of the panel.
-             The color palette and Clear button will be drawn on top of this.
-             (This covers some of the same area as the border I just drew. */
+        // Draw 3 pixel wide Gray border
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 3));
 
         g.fillRect(width - 56, 0, 56, height);
 
@@ -127,7 +88,7 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         
         // *** Re-draw all of the information, based on the state of our data structure
         for (Line line : lines) {
-            switch (line.colorCode) {
+            switch (line.getColorCode()) {
                 case BLACK -> g.setColor(Color.BLACK);
                 case RED -> g.setColor(Color.RED);
                 case GREEN -> g.setColor(Color.GREEN);
@@ -136,8 +97,8 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
                 case MAGENTA -> g.setColor(Color.MAGENTA);
                 case YELLOW -> g.setColor(Color.YELLOW);
             }
-            g.drawLine(line.x1, line.y1,
-                    line.x2, line.y2);
+            g.drawLine(line.getX1(), line.getY1(),
+                    line.getX2(), line.getY2());
 
         }
         
@@ -171,7 +132,7 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         int width = getWidth();    // Width of the panel.
         int height = getHeight();  // Height of the panel.
 
-        if (dragging == true)  // Ignore mouse presses that occur
+        if (dragging)  // Ignore mouse presses that occur
             return;            //    when user is already drawing a curve.
                                //    (This can happen if the user presses
                                //    two mouse buttons at the same time.)
@@ -202,7 +163,7 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
      * a curve, the curve is done, so we should set dragging to false
      */
     public void mouseReleased(MouseEvent evt) {
-        if (dragging == false)
+        if (!dragging)
         		return; // Nothing to do because the user isn't drawing.
         dragging = false;
     }
@@ -217,7 +178,7 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
      * palette or clear button.
      */
     public void mouseDragged(MouseEvent evt) {
-        if (dragging == false)
+        if (!dragging)
             return;  // Nothing to do because the user isn't drawing.
 
         int x = evt.getX();   // x-coordinate of mouse.
@@ -237,6 +198,8 @@ public class SimplePaint extends JPanel implements MouseListener, MouseMotionLis
         // Remember, NO DRAWING here!
 
         lines.add(new Line(prevX, prevY, x, y, currentColor));
+        prevX = x;
+        prevY = y;
         repaint();
         
 
