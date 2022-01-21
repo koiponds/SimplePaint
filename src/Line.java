@@ -1,13 +1,15 @@
+import java.awt.*;
+
 public class Line {
     private int x1, y1, x2, y2;
-    private int colorCode;
+    private Color color;
 
-    public Line(int x1, int y1, int x2, int y2, int colorCode) {
+    public Line(int x1, int y1, int x2, int y2, Color color) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
-        this.colorCode = colorCode;
+        this.color = color;
     }
 
     public int getX1() {
@@ -42,11 +44,11 @@ public class Line {
         this.y2 = y2;
     }
 
-    public int getColorCode() {
-        return colorCode;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorCode(int colorCode) {
-        this.colorCode = colorCode;
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
