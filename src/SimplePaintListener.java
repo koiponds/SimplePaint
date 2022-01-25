@@ -130,7 +130,6 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
     }
 
     public void stateChanged(ChangeEvent e) {
-        System.out.println("TEST");
         Color color = colorChooser.getColor();
         paintPanel.setCurrentColor(color);
     }
