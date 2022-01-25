@@ -17,11 +17,13 @@ public class SimplePaintPanel extends JPanel {
     private ArrayList<Line> lines = new ArrayList<Line>();
 
 
+    SimplePaintPanel() {
+
+    }
+
     SimplePaintPanel(ColorPanel colorPanel) {
         this.colorPanel = colorPanel;
         this.setBackground(Color.BLACK);
-        //*** Since the SimplePaint JPanel is also a Listener, register appropriately
-
     }
 
     public void paintComponent(Graphics g) {
@@ -33,23 +35,8 @@ public class SimplePaintPanel extends JPanel {
         
         // *** Re-draw all of the information, based on the state of our data structure
         for (Line line : lines) {
-            if (Color.WHITE.equals(line.getColor())) {
-                g.setColor(Color.WHITE);
-            } else if (Color.RED.equals(line.getColor())) {
-                g.setColor(Color.RED);
-            } else if (Color.GREEN.equals(line.getColor())) {
-                g.setColor(Color.GREEN);
-            } else if (Color.BLUE.equals(line.getColor())) {
-                g.setColor(Color.BLUE);
-            } else if (Color.CYAN.equals(line.getColor())) {
-                g.setColor(Color.CYAN);
-            } else if (Color.MAGENTA.equals(line.getColor())) {
-                g.setColor(Color.MAGENTA);
-            } else if (Color.YELLOW.equals(line.getColor())) {
-                g.setColor(Color.YELLOW);
-            }
-            g.drawLine(line.getX1(), line.getY1(),
-                    line.getX2(), line.getY2());
+            g.setColor(line.getColor());
+            g.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 
         }
         
@@ -84,7 +71,7 @@ public class SimplePaintPanel extends JPanel {
     }
 
     public boolean isDragging() {
-        return dragging;
+        return !dragging;
     }
 
     public void setDragging(boolean dragging) {

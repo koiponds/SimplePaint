@@ -1,16 +1,20 @@
 import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.plaf.ColorChooserUI;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimplePaintListener implements MouseListener, MouseMotionListener, ActionListener {
+public class SimplePaintListener implements MouseListener, MouseMotionListener, ActionListener, ChangeListener {
     private ColorPanel colorPanel;
     private SimplePaintPanel paintPanel;
+    private ColorChooser colorChooser;
 
-    public SimplePaintListener(SimplePaintPanel paintPanel, ColorPanel colorPanel) {
+    public SimplePaintListener(SimplePaintPanel paintPanel, ColorPanel colorPanel, ColorChooser colorChooser) {
         this.paintPanel = paintPanel;
         this.colorPanel = colorPanel;
+        this.colorChooser = colorChooser;
+
+        colorChooser.getChooser().getSelectionModel().addChangeListener(this);
 
         colorPanel.getWhite().addActionListener(this);
         colorPanel.getRed().addActionListener(this);
@@ -41,7 +45,7 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (!paintPanel.isDragging())
+        if (paintPanel.isDragging())
             return; // Nothing to do because the user isn't drawing.
         paintPanel.setDragging(false);
 
@@ -59,7 +63,7 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
 
     @Override
     public void mouseDragged(MouseEvent evt) {
-        if (!paintPanel.isDragging()) {
+        if (paintPanel.isDragging()) {
             return;  // Nothing to do because the user isn't drawing.
         }
 
@@ -107,9 +111,17 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
             paintPanel.setCurrentColor(Color.YELLOW);
         }
         if (e.getSource() == colorPanel.getColorSelector()) {
+            colorChooser.create();
         }
         if (e.getSource() == colorPanel.getClear()) {
             paintPanel.clear();
         }
     }
+
+    public void stateChanged(ChangeEvent e) {
+        System.out.println("TEST");
+        Color color = colorChooser.getColor();
+        paintPanel.setCurrentColor(color);
+    }
+
 }

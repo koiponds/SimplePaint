@@ -3,7 +3,6 @@ import java.awt.*;
 
 
 public class ColorPanel extends JPanel {
-    private SimplePaintPanel paintPanel;
 
     private JButton white;
     private JButton red;
@@ -17,6 +16,7 @@ public class ColorPanel extends JPanel {
 
     public ColorPanel() {
         this.setLayout(new GridLayout(9,1));
+
         white = new JButton();
         white.setBackground(Color.WHITE);
         white.setOpaque(true);
@@ -105,4 +105,5 @@ public class ColorPanel extends JPanel {
     public JButton getColorSelector() {
         return colorSelector;
     }
+
 }

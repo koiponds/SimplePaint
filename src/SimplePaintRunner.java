@@ -6,8 +6,9 @@ public class SimplePaintRunner {
     public static void main(String[] args) {
         JFrame window = new JFrame("Simple Paint");
         ColorPanel colorPanel = new ColorPanel();
+        ColorChooser colorChooser = new ColorChooser();
         SimplePaintPanel content = new SimplePaintPanel(colorPanel);
-        new SimplePaintListener(content, colorPanel);
+        new SimplePaintListener(content, colorPanel, colorChooser);
 
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
