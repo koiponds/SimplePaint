@@ -4,7 +4,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SimplePaintListener implements MouseListener, MouseMotionListener, ActionListener, ChangeListener {
+public class SimplePaintListener implements MouseListener, MouseMotionListener, ActionListener, ChangeListener, KeyListener {
     private ColorPanel colorPanel;
     private SimplePaintPanel paintPanel;
     private ColorChooser colorChooser;
@@ -28,6 +28,7 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
 
         paintPanel.addMouseListener(this);
         paintPanel.addMouseMotionListener(this);
+        paintPanel.addKeyListener(this);
     }
 
     @Override
@@ -37,6 +38,7 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
 
     @Override
     public void mousePressed(MouseEvent e) {
+        paintPanel.requestFocus();
         paintPanel.setDragging(true);
         paintPanel.setPrevX(e.getX());
         paintPanel.setPrevY(e.getY());
@@ -89,6 +91,8 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String s = e.getActionCommand();
+
         if (e.getSource() == colorPanel.getRed()) {
             paintPanel.setCurrentColor(Color.RED);
         }
@@ -116,6 +120,13 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
         if (e.getSource() == colorPanel.getClear()) {
             paintPanel.clear();
         }
+
+        if (s.equals("Quit")) {
+            System.exit(0);
+        }
+        if (s.equals("Undo")) {
+            paintPanel.removeLine();
+        }
     }
 
     public void stateChanged(ChangeEvent e) {
@@ -124,4 +135,20 @@ public class SimplePaintListener implements MouseListener, MouseMotionListener, 
         paintPanel.setCurrentColor(color);
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_Z && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+            paintPanel.removeLine();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }

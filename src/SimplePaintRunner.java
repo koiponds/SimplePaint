@@ -8,7 +8,24 @@ public class SimplePaintRunner {
         ColorPanel colorPanel = new ColorPanel();
         ColorChooser colorChooser = new ColorChooser();
         SimplePaintPanel content = new SimplePaintPanel(colorPanel);
-        new SimplePaintListener(content, colorPanel, colorChooser);
+        SimplePaintListener listener = new SimplePaintListener(content, colorPanel, colorChooser);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu simplePaintMenu = new JMenu("Simple Paint");
+        JMenu editMenu = new JMenu("Menu");
+
+        JMenuItem quit = new JMenuItem("Quit");
+        simplePaintMenu.add(quit);
+        quit.addActionListener(listener);
+
+        JMenuItem undo = new JMenuItem("Undo");
+        editMenu.add(undo);
+        undo.addActionListener(listener);
+
+        menuBar.add(simplePaintMenu);
+        menuBar.add(editMenu);
+        window.setJMenuBar(menuBar);
+
 
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
@@ -21,5 +38,6 @@ public class SimplePaintRunner {
         window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         window.setVisible(true);
 
+        content.requestFocus();
     }
 }

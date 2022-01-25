@@ -54,6 +54,12 @@ public class SimplePaintPanel extends JPanel {
         lines.add(line);
     }
 
+    public void removeLine () {
+        if (lines.size() > 1) {
+            lines.remove(lines.size() - 1);
+        }
+    }
+
     public int getPrevX() {
         return prevX;
     }
